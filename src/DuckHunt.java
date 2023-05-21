@@ -1,7 +1,10 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+
 
 
 public class DuckHunt extends Application {
@@ -13,22 +16,24 @@ public class DuckHunt extends Application {
 
 
         StartScreen s = new StartScreen(scale);
-
         Scene TitleScene = new Scene(s,scale*300 ,scale*300 );
+        SelectionScene selection =new SelectionScene(scale,primaryStage,TitleScene);
+
 
 
         primaryStage.setTitle("HUBBM DUCKHUNT"); // Set the stage title
         primaryStage.getIcons().add(new Image("/assets/favicon/1.png"));
         primaryStage.setScene(TitleScene);
         primaryStage.setResizable(false);
+        s.mediaPlay();
         primaryStage.show();
 
-        s.mediaPlay();
 
         TitleScene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case ENTER:
-                    //primaryStage.setScene(SelectionScene);
+                    primaryStage.setScene(selection.selectionScene);
+
                     break;
                 case ESCAPE:
                     javafx.application.Platform.exit();
@@ -38,6 +43,7 @@ public class DuckHunt extends Application {
             }
 
         });
+
     }
 
 

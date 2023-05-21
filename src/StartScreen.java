@@ -2,6 +2,9 @@
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +16,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
+
 import java.io.File;
 
 
-public class StartScreen extends Pane {
+public class StartScreen  extends Pane {
 
     String media =new File("assets/effects/Title.mp3").toURI().toString();
     Media med=new Media(media);
@@ -25,42 +29,26 @@ public class StartScreen extends Pane {
 
 
     public StartScreen(double scale){
-        super();
+
         Image image =new Image("assets/welcome/1.png");
-//        ImageView view = new ImageView(image);
-//        view.fitHeightProperty().bind(this.heightProperty());
-//        view.fitWidthProperty().bind(this.widthProperty());
-        BackgroundImage backgroundImage = new BackgroundImage(
-                image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                new BackgroundSize(widthProperty().get(),heightProperty().get(), false, false, true, true)
-        );
+
+       ImageView view = new ImageView(image);
+       view.fitWidthProperty().bind(widthProperty());
+       view.fitHeightProperty().bind(heightProperty());
 
 
-        Background background = new Background(backgroundImage);
-        this.setBackground(background);
-
-        Label message = new Label("PRESS ENTER TO START\n    PRESS ESC TO EXIT");
-        message.setLineSpacing(-10*scale);
-        message.setFont(Font.font("Calibri", FontWeight.BOLD,17.5*scale));
-        message.setTextFill(Color.ORANGE);
-        message.layoutYProperty().bind(heightProperty().divide(1.65));
-        message.layoutXProperty().bind(widthProperty().divide(4.90));
+        Message message1 =new Message(scale,17.5);
+        message1.addText("PRESS ENTER TO START");
+        message1.addText("    PRESS ESC TO EXIT");
+        fadeText(message1);
+        message1.layoutYProperty().bind(heightProperty().divide(1.65));
+        message1.layoutXProperty().bind(widthProperty().divide(4.85));
 
 
-        FadeTransition fade = new FadeTransition();
-        fade.setNode(message);
-        fade.setDuration(Duration.millis(1000));
-        fade.setCycleCount(TranslateTransition.INDEFINITE);
-        fade.setInterpolator(Interpolator.LINEAR);
-        fade.setFromValue(0);
-        fade.setToValue(1);
-        fade.play();
 
-        //getChildren().add(view);
-        getChildren().add(message);
+        getChildren().addAll(view,message1);
+
+
 
     }
     public void mediaPlay(){
@@ -69,7 +57,17 @@ public class StartScreen extends Pane {
         player.play();
     }
 
+    public static void fadeText(Node node) {
+        FadeTransition fade = new FadeTransition();
+        fade.setNode(node);
+        fade.setDuration(Duration.millis(1000));
+        fade.setCycleCount(TranslateTransition.INDEFINITE);
+        fade.setInterpolator(Interpolator.LINEAR);
+        fade.setFromValue(0.1);
+        fade.setToValue(10);
+        fade.play();
     }
+}
 
 
 
