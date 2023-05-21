@@ -21,11 +21,15 @@ public class DuckHunt extends Application {
 
 
 
+
+        Bc aaaaabee = new Bc();
+        Scene sex = new Scene(aaaaabee);
+
         primaryStage.setTitle("HUBBM DUCKHUNT"); // Set the stage title
         primaryStage.getIcons().add(new Image("/assets/favicon/1.png"));
         primaryStage.setScene(TitleScene);
         primaryStage.setResizable(false);
-        s.mediaPlay();
+       // s.mediaPlay();
         primaryStage.show();
 
 
@@ -37,6 +41,11 @@ public class DuckHunt extends Application {
                     break;
                 case ESCAPE:
                     javafx.application.Platform.exit();
+                    break;
+
+                case A:
+
+                    primaryStage.setScene(sex);
                     break;
                 default:
                     break;

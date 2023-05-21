@@ -2,6 +2,8 @@
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -30,23 +32,29 @@ public class StartScreen  extends Pane {
 
     public StartScreen(double scale){
 
-        Image image =new Image("assets/welcome/1.png");
 
-       ImageView view = new ImageView(image);
-       view.fitWidthProperty().bind(widthProperty());
-       view.fitHeightProperty().bind(heightProperty());
+        Image image =new Image("assets/welcome/1.png");
+        ImageView view = new ImageView(image);
+        view.fitWidthProperty().bind(widthProperty());
+        view.fitHeightProperty().bind(heightProperty());
 
 
         Message message1 =new Message(scale,17.5);
         message1.addText("PRESS ENTER TO START");
-        message1.addText("    PRESS ESC TO EXIT");
+        message1.addText("PRESS ESC TO EXIT");
         fadeText(message1);
+
+
+
+        getChildren().addAll(view,message1);
+
+
         message1.layoutYProperty().bind(heightProperty().divide(1.65));
         message1.layoutXProperty().bind(widthProperty().divide(4.85));
 
 
 
-        getChildren().addAll(view,message1);
+
 
 
 

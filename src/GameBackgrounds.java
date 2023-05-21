@@ -8,6 +8,7 @@ import java.util.LinkedList;
 public class GameBackgrounds{
 
     public LinkedList<Background> views = new LinkedList<>();
+
     public Pane pane;
     public GameBackgrounds(Pane pane){
         this.pane=pane;
@@ -25,8 +26,11 @@ public class GameBackgrounds{
         BackgroundImage BackgroundValue = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(
                         pane.getWidth(),pane.getHeight(),false,false,false,true)
-        )s;
+        );
         return new Background(BackgroundValue);
     }
+
+
+
 }
 
