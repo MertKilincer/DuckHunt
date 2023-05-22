@@ -34,6 +34,7 @@ public class SelectionScene {
         this.selectionScene=new Scene(pane,scale*300,scale*300);
 
         Message text =new Message(scale,10.0);
+        text.addText("");
         text.addText("USE ARROW KEYS TO NAVIGATE");
         text.addText("PRESS ENTER TO START");
         text.addText( "PRESS ESC TO EXIT");

@@ -20,9 +20,11 @@ public class Message extends VBox {
         setAlignment(Pos.CENTER);
         this.scale=scale;
         size=textSize;
+        setSpacing(scale*(-textSize/3));
 
     }
     public void addText(String line) {
+
         Label text = new Label(line);
         text.setFont(Font.font("Calibri", FontWeight.BOLD,size*scale));
         text.setTextFill(Color.ORANGE);
