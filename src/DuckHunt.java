@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 public class DuckHunt extends Application {
 
-    public Double scale= 2.0;
+    public Double scale= 3.0;
 
     @Override
     public void start(Stage primaryStage){

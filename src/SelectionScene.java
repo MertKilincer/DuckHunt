@@ -1,4 +1,6 @@
 
+import com.sun.javafx.cursor.CursorFrame;
+import com.sun.javafx.cursor.CursorType;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -47,7 +49,7 @@ public class SelectionScene {
         StackPane Cross =new StackPane(new ImageView(view));
 
 
-        CustomCursor customCursor= new CustomCursor();
+        CustomCursor customCursor= new CustomCursor(view);
         selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX(), event.getY()));
         pane.getChildren().add(customCursor);
 
@@ -57,7 +59,8 @@ public class SelectionScene {
         selectionScene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> customCursor.setVisible(false));
         selectionScene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> customCursor.setVisible(true));
 
-
+        selectionScene.setCursor(new ImageCursor(view ,view.getWidth()/2,view.getHeight()/2));
+        selectionScene.setCursor(Cursor.NONE);
 
 
 
