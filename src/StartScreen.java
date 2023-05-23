@@ -5,6 +5,7 @@ import javafx.animation.TranslateTransition;
 
 import javafx.geometry.Pos;
 
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 
 import javafx.scene.image.Image;
@@ -54,7 +55,7 @@ public class StartScreen  extends Pane {
         message1.layoutXProperty().bind(widthProperty().divide(7.5));
 
 
-
+        setCursor(Cursor.DEFAULT);
 
 
 

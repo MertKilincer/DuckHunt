@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
 
 public class DuckHunt extends Application {
 
-    public Double scale= 3.0;
+    public Double scale= 2.0;
 
     @Override
     public void start(Stage primaryStage){
@@ -23,13 +24,15 @@ public class DuckHunt extends Application {
 
 
         Bc aaaaabee = new Bc();
-        Scene sex = new Scene(aaaaabee);
+
 
         primaryStage.setTitle("HUBBM DUCKHUNT"); // Set the stage title
         primaryStage.getIcons().add(new Image("/assets/favicon/1.png"));
         primaryStage.setScene(TitleScene);
         primaryStage.setResizable(false);
        // s.mediaPlay();
+
+
         primaryStage.show();
 
 
@@ -45,7 +48,7 @@ public class DuckHunt extends Application {
 
                 case A:
 
-                    primaryStage.setScene(sex);
+                    primaryStage.setScene(aaaaabee.scene1);
                     break;
                 default:
                     break;

@@ -2,9 +2,14 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventDispatcher;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.image.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,7 +21,7 @@ import java.util.Map;
 
 public class Bc extends Pane {
 
-
+    public Scene scene1;
 
     public Bc(){
 
@@ -26,7 +31,7 @@ public class Bc extends Pane {
         imageView.fitWidthProperty().bind(widthProperty());
         imageView.fitHeightProperty().bind(heightProperty());
 
-
+        Pane pane =new Pane();
 
         Line line = new Line();
         line.setStartX(450);
@@ -63,21 +68,41 @@ public class Bc extends Pane {
         pt2.setAutoReverse(true);
 
         ParallelTransition paralel = new ParallelTransition(pt,pt2);
-        getChildren().add(circle1);
+        pane.getChildren().add(circle1);
+        getChildren().add(pane);
         getChildren().add(imageView);
         getChildren().addAll(line,circle);
 
         circle.toBack();
-        circle1.toFront();
+        pane.toFront();
         paralel.play();
 
 
+        Circle circle2 = new Circle(450,150,50);
+
+
+
+        pane.getChildren().add(circle2);
 
 
 
 
-        circle1.setOnMouseClicked(event -> javafx.application.Platform.exit());
+        this.scene1=new Scene(this);
 
+
+
+        scene1.setOnMouseClicked(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            if (isIntersecting(circle1, x,y)) {
+                System.out.println("Clicked on Circle 1");
+                // Perform desired action for Circle 1
+            }if (isIntersecting(circle2, x, y)) {
+                System.out.println("Clicked on Circle 2");
+                // Perform desired action for Circle 2
+            }
+            })
+        ;
 
 
 
@@ -137,6 +162,10 @@ public class Bc extends Pane {
 
         }
 
+    private boolean isIntersecting(Circle circle, double x, double y) {
+        Bounds bounds = circle.localToScene(circle.getBoundsInLocal());
+        return bounds.contains(x, y);
+    }
 
 
 }

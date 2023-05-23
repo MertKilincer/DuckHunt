@@ -1,11 +1,14 @@
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,7 +30,7 @@ public class SelectionScene {
         StackPane pane = new StackPane();
 
 
-        backgrounds=new GameBackgrounds(pane);
+        backgrounds=new GameBackgrounds(pane,scale);
         IndexBack =0;
 
         pane.setBackground(backgrounds.views.get(0));
@@ -40,6 +43,19 @@ public class SelectionScene {
         text.addText( "PRESS ESC TO EXIT");
         text.setAlignment(Pos.TOP_CENTER);
         pane.getChildren().add(text);
+        Image view =backgrounds.Crossair.get(0);
+        StackPane Cross =new StackPane(new ImageView(view));
+
+
+        CustomCursor customCursor= new CustomCursor();
+        selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX(), event.getY()));
+        pane.getChildren().add(customCursor);
+
+        pane.getChildren().add(Cross);
+        Cross.setAlignment(Pos.CENTER);
+
+        selectionScene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> customCursor.setVisible(false));
+        selectionScene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> customCursor.setVisible(true));
 
 
 
