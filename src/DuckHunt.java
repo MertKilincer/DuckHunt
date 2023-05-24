@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 public class DuckHunt extends Application {
 
-    public Double scale= 3.0;
+    public Double scale= 2.0;
 
     @Override
     public void start(Stage primaryStage){
@@ -23,14 +23,14 @@ public class DuckHunt extends Application {
 
 
 
-        Bc aaaaabee = new Bc();
+        Bc aaaaabee = new Bc(scale);
 
 
         primaryStage.setTitle("HUBBM DUCKHUNT"); // Set the stage title
         primaryStage.getIcons().add(new Image("/assets/favicon/1.png"));
         primaryStage.setScene(TitleScene);
         primaryStage.setResizable(false);
-       // s.mediaPlay();
+        s.mediaPlay();
 
 
         primaryStage.show();

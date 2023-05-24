@@ -45,21 +45,26 @@ public class SelectionScene {
         text.addText( "PRESS ESC TO EXIT");
         text.setAlignment(Pos.TOP_CENTER);
         pane.getChildren().add(text);
-        Image view =backgrounds.Crossair.get(0);
-        StackPane Cross =new StackPane(new ImageView(view));
 
+        StackPane Cross =new StackPane();
 
-        CustomCursor customCursor= new CustomCursor(view);
-        selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX(), event.getY()));
-        pane.getChildren().add(customCursor);
+        Cross.setBackground(backgrounds.Crossair.get(0));
 
+        //CustomCursor customCursor= new CustomCursor(view);
+        //selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
         pane.getChildren().add(Cross);
+        //pane.getChildren().add(customCursor);
+
+
         Cross.setAlignment(Pos.CENTER);
 
-        selectionScene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> customCursor.setVisible(false));
-        selectionScene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> customCursor.setVisible(true));
 
-        selectionScene.setCursor(new ImageCursor(view ,view.getWidth()/2,view.getHeight()/2));
+
+        //selectionScene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> customCursor.setVisible(false));
+        //selectionScene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> customCursor.setVisible(true));
+
+
+
         selectionScene.setCursor(Cursor.NONE);
 
 
@@ -79,6 +84,9 @@ public class SelectionScene {
                 case LEFT:
                     IndexBack = (IndexBack >0) ? IndexBack -1:0;
                     pane.setBackground(backgrounds.views.get(IndexBack));
+                    break;
+                case UP:
+                    Cross.setBackground(backgrounds.Crossair.get(1));
                     break;
                 case ESCAPE:
                     stage.setScene(Title);

@@ -1,6 +1,7 @@
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventDispatcher;
 import javafx.event.EventHandler;
@@ -23,7 +24,7 @@ public class Bc extends Pane {
 
     public Scene scene1;
 
-    public Bc(){
+    public Bc(Double scale){
 
         Image image = new Image("/assets/background/1.png");
 
@@ -79,7 +80,13 @@ public class Bc extends Pane {
 
 
         Circle circle2 = new Circle(450,150,50);
-
+        TranslateTransition ts = new TranslateTransition();
+        ts.setDuration(Duration.millis(4000));
+        ts.setByX(-350);
+        ts.setNode(circle2);
+        ts.setCycleCount(Timeline.INDEFINITE);
+        ts.setAutoReverse(true);
+        ts.play();
 
 
         pane.getChildren().add(circle2);
@@ -87,7 +94,7 @@ public class Bc extends Pane {
 
 
 
-        this.scene1=new Scene(this);
+        this.scene1=new Scene(this,scale*300,scale*300);
 
 
 

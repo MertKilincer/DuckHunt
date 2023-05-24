@@ -10,7 +10,7 @@ public class GameBackgrounds{
 
     public LinkedList<Background> views = new LinkedList<>();
 
-    public LinkedList<Image> Crossair = new LinkedList<>();
+    public LinkedList<Background> Crossair = new LinkedList<>();
 
     public Pane pane;
 
@@ -46,9 +46,10 @@ public class GameBackgrounds{
         for (File i : files) {
             Image image = new Image(i.getPath(),32*(scale/3),32*(scale/3),true,true);
 
-            //ImageView view = new ImageView(image);
+            BackgroundImage backgroundImage= new BackgroundImage(image,BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
 
-            Crossair.add(image);
+            Crossair.add(new Background(backgroundImage));
         }
     }
 
