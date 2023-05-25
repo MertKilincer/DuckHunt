@@ -1,44 +1,33 @@
-
-import com.sun.javafx.cursor.CursorFrame;
-import com.sun.javafx.cursor.CursorType;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
 
 public class SelectionScene {
-
     public Scene selectionScene;
-    public GameBackgrounds backgrounds;
+    public GameElements backgrounds;
     public int IndexBack;
 
+    public int IndexCross;
 
+    public StackPane pane;
 
+    public StackPane cross;
 
+    public SelectionScene(double scale) {
+        pane = new StackPane();
+        cross =new StackPane();
 
-    public SelectionScene(double scale, Stage stage,Scene Title) {
-        StackPane pane = new StackPane();
-
-
-        backgrounds=new GameBackgrounds(pane,scale);
+        backgrounds=new GameElements(pane,scale);
         IndexBack =0;
+        IndexCross= 0;
 
         pane.setBackground(backgrounds.views.get(0));
+        cross.setBackground(backgrounds.Crossair.get(0));
+
         this.selectionScene=new Scene(pane,scale*300,scale*300);
 
-        Message text =new Message(scale,10.0);
+        Message text =new Message(scale,10.0,Pos.CENTER);
         text.addText("");
         text.addText("USE ARROW KEYS TO NAVIGATE");
         text.addText("PRESS ENTER TO START");
@@ -46,17 +35,17 @@ public class SelectionScene {
         text.setAlignment(Pos.TOP_CENTER);
         pane.getChildren().add(text);
 
-        StackPane Cross =new StackPane();
 
-        Cross.setBackground(backgrounds.Crossair.get(0));
+
+
 
         //CustomCursor customCursor= new CustomCursor(view);
         //selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
-        pane.getChildren().add(Cross);
+        pane.getChildren().add(cross);
         //pane.getChildren().add(customCursor);
+        
 
-
-        Cross.setAlignment(Pos.CENTER);
+        cross.setAlignment(Pos.CENTER);
 
 
 
@@ -73,31 +62,30 @@ public class SelectionScene {
 
 
 
-        selectionScene.setOnKeyPressed(event -> {
-
-            switch (event.getCode()){
-
-                case RIGHT:
-                    IndexBack = (IndexBack>=5) ? 5:IndexBack+1;
-                    pane.setBackground(backgrounds.views.get(IndexBack));
-                    break;
-                case LEFT:
-                    IndexBack = (IndexBack >0) ? IndexBack -1:0;
-                    pane.setBackground(backgrounds.views.get(IndexBack));
-                    break;
-                case UP:
-                    Cross.setBackground(backgrounds.Crossair.get(1));
-                    break;
-                case ESCAPE:
-                    stage.setScene(Title);
-                    break;
-                default:
-                    break;
-            }
-        }
 
 
-        );
+
+
+    }
+
+
+    public void rightArrow(){
+        IndexBack = (IndexBack>=5) ? 5:IndexBack+1;
+        pane.setBackground(backgrounds.views.get(IndexBack));
+    }
+    public void leftArrow(){
+        IndexBack = (IndexBack >0) ? IndexBack -1:0;
+        pane.setBackground(backgrounds.views.get(IndexBack));
+    }
+
+    public void upArrow(){
+        IndexCross = (IndexCross>=6) ? 6:IndexCross+1;
+        cross.setBackground(backgrounds.Crossair.get(IndexCross));
+    }
+
+    public void downArrow(){
+        IndexCross = (IndexCross>0) ? IndexCross-1:0;
+        cross.setBackground(backgrounds.Crossair.get(IndexCross));
     }
 
 

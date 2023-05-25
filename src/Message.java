@@ -4,8 +4,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+
 
 public class Message extends VBox {
 
@@ -15,9 +14,9 @@ public class Message extends VBox {
 
     public Double size;
 
-    public Message(Double scale,Double textSize){
+    public Message(Double scale,Double textSize,Pos position){
         super();
-        setAlignment(Pos.CENTER);
+        setAlignment(position);
         this.scale=scale;
         size=textSize;
         setSpacing(scale*(-textSize/3));

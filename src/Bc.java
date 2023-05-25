@@ -26,7 +26,7 @@ public class Bc extends Pane {
 
     public Bc(Double scale){
 
-        Image image = new Image("/assets/background/1.png");
+        Image image = new Image("/assets/background/3.png");
 
         ImageView imageView = new ImageView(clearer(image));;
         imageView.fitWidthProperty().bind(widthProperty());
@@ -80,9 +80,10 @@ public class Bc extends Pane {
 
 
         Circle circle2 = new Circle(450,150,50);
+
         TranslateTransition ts = new TranslateTransition();
         ts.setDuration(Duration.millis(4000));
-        ts.setByX(-350);
+        ts.setByX(scale*150-50);
         ts.setNode(circle2);
         ts.setCycleCount(Timeline.INDEFINITE);
         ts.setAutoReverse(true);
