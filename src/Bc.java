@@ -7,7 +7,9 @@ import javafx.event.EventDispatcher;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
@@ -24,97 +26,56 @@ public class Bc extends Pane {
 
     public Scene scene1;
 
-    public Bc(Double scale){
+    public CustomCrosshair cursor;
+
+    public Bc(Double scale,CustomCrosshair cursor){
 
         Image image = new Image("/assets/background/3.png");
 
         ImageView imageView = new ImageView(clearer(image));;
         imageView.fitWidthProperty().bind(widthProperty());
         imageView.fitHeightProperty().bind(heightProperty());
+        this.cursor = cursor;
 
-        Pane pane =new Pane();
-
-        Line line = new Line();
-        line.setStartX(450);
-        line.setEndX(450);
-        line.setStartY(150);
-        line.setEndY(800);
-
-
-        Circle circle = new Circle(450,150,150);
-        Circle circle1 =new Circle(450,150,150);
-        circle1.setFill(Color.TRANSPARENT);
-
-
-
-        PathTransition pt = new PathTransition();
-        pt.setDuration(Duration.millis(4000));
-        pt.setPath(line);
-        pt.setNode(circle);
-
-        pt.setOrientation(
-                PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pt.setCycleCount(Timeline.INDEFINITE);
-        pt.setAutoReverse(true);
-
-
-
-        PathTransition pt2 = new PathTransition();
-        pt2.setDuration(Duration.millis(4000));
-        pt2.setPath(line);
-        pt2.setNode(circle1);
-        pt2.setOrientation(
-                PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pt2.setCycleCount(Timeline.INDEFINITE);
-        pt2.setAutoReverse(true);
-
-        ParallelTransition paralel = new ParallelTransition(pt,pt2);
-        pane.getChildren().add(circle1);
-        getChildren().add(pane);
+        getChildren().add(cursor);
         getChildren().add(imageView);
-        getChildren().addAll(line,circle);
-
-        circle.toBack();
-        pane.toFront();
-        paralel.play();
-
-
-        Circle circle2 = new Circle(450,150,50);
-
-        TranslateTransition ts = new TranslateTransition();
-        ts.setDuration(Duration.millis(4000));
-        ts.setByX(scale*150-50);
-        ts.setNode(circle2);
-        ts.setCycleCount(Timeline.INDEFINITE);
-        ts.setAutoReverse(true);
-        ts.play();
-
-
-        pane.getChildren().add(circle2);
-
-
 
 
         this.scene1=new Scene(this,scale*300,scale*300);
 
+        Duck duck1= new Duck("duck_black",scene1,this);
+        getChildren().add(duck1.animationView);
+        duck1.animationView.setLayoutX(0);
+        duck1.animationView.setLayoutY(150);
+        //duck1.LinearMotionRight('R');
+        duck1.diagonalMotion();
+        scene1.setCursor(Cursor.NONE);
+
+
+
+
+        scene1.setOnMouseMoved(event -> cursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
+        scene1.addEventHandler(MouseEvent.MOUSE_EXITED, event -> cursor.setVisible(false));
+        scene1.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> cursor.setVisible(true));
 
 
         scene1.setOnMouseClicked(event -> {
-            double x = event.getX();
-            double y = event.getY();
-            if (isIntersecting(circle1, x,y)) {
-                System.out.println("Clicked on Circle 1");
-                // Perform desired action for Circle 1
-            }if (isIntersecting(circle2, x, y)) {
-                System.out.println("Clicked on Circle 2");
-                // Perform desired action for Circle 2
+            Double x = event.getX()-(scale/3*16);
+            Double y = event.getY()-(scale/3*16);
+            if (duck1.animationView.getBoundsInParent().contains(x,y)){
+                System.out.println(duck1.animationView.getBoundsInParent());
+                duck1.Stop();
+                duck1.Falling();
+
             }
-            })
-        ;
+        });
 
 
 
     }
+
+
+
 
 
     public Image clearer(Image image){
@@ -174,6 +135,9 @@ public class Bc extends Pane {
         Bounds bounds = circle.localToScene(circle.getBoundsInLocal());
         return bounds.contains(x, y);
     }
+
+
+
 
 
 }

@@ -6,47 +6,37 @@ import java.util.LinkedList;
 
 public class GameElements {
 
-    public LinkedList<Background> views = new LinkedList<>();
+    public LinkedList<CustomBackground> views = new LinkedList<>();
 
-    public LinkedList<Background> Crossair = new LinkedList<>();
+    public LinkedList<CustomCrosshair> Crossair = new LinkedList<>();
 
 
-
-    public Pane pane;
-
-    public Double scale;
     public GameElements(Pane pane, double scale){
-        this.pane=pane;
-        this.scale =scale;
-        for(int i=1;i<7;i++){
-            views.add(createBackground(pane,i));
+        createBackground(pane);
+        createCrossair(scale);
+
+    }
+
+
+    public void createBackground(Pane pane) {
+        String directoryPath = "assets/background";
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        for (File i : files) {
+            views.add(new CustomBackground(i.getPath(),pane));
         }
-        createCrossair();
 
     }
 
-
-    public Background createBackground(Pane pane, int num) {
-        Image image = new Image(String.format("/assets/background/%s.png", num));
-        BackgroundImage BackgroundValue = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(pane.getWidth(), pane.getHeight(), false, false, false, true)
-        );
-        return new Background(BackgroundValue);
-    }
-
-    public void createCrossair() {
+    public void createCrossair(Double scale) {
         String directoryPath = "assets/crosshair";
         File directory = new File(directoryPath);
         File[] files = directory.listFiles();
 
         for (File i : files) {
-            Image image = new Image(i.getPath(), 32 * (scale / 3), 32 * (scale / 3), true, true);
+            Crossair.add(new CustomCrosshair(i.getPath(),scale));
 
-            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
 
-            Crossair.add(new Background(backgroundImage));
         }
     }
     public void createMusics(){

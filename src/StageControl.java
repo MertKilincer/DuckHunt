@@ -11,13 +11,17 @@ public class StageControl {
 
     public SelectionScene selection;
 
+    public GameElements elements;
+
     public Stage stage;
 
 
     public StageControl(Stage stage ,double scale){
         this.stage = stage;
         title =new StartScreen(scale,stage);
-        selection =new SelectionScene(scale);
+        elements=new GameElements(title,scale);
+        selection =new SelectionScene(scale,elements.views,elements.Crossair);
+
         stage.setScene(title.titleScene);
 
 
@@ -28,15 +32,9 @@ public class StageControl {
             switch (event.getCode()) {
                 case ENTER:
                     stage.setScene(selection.selectionScene);
-
                     break;
                 case ESCAPE:
                     javafx.application.Platform.exit();
-                    break;
-
-                case A:
-                    Bc aaaaabee = new Bc(scale);
-                    stage.setScene(aaaaabee.scene1);
                     break;
                 default:
                     break;
@@ -64,6 +62,10 @@ public class StageControl {
                     break;
                 case ENTER:
                     player.pause();
+                    CustomCrosshair cursor =selection.getCurrentCross();
+                    Bc aaaaabee = new Bc(scale,cursor);
+                    stage.setScene(aaaaabee.scene1);
+
                     break;
                 default:
                     break;

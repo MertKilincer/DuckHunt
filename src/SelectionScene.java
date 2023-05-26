@@ -1,11 +1,17 @@
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+
+import java.util.LinkedList;
 
 public class SelectionScene {
     public Scene selectionScene;
-    public GameElements backgrounds;
+
+    public LinkedList<CustomBackground> backgrounds;
+
+    public LinkedList<CustomCrosshair> crosshairs;
     public int IndexBack;
 
     public int IndexCross;
@@ -14,18 +20,20 @@ public class SelectionScene {
 
     public StackPane cross;
 
-    public SelectionScene(double scale) {
+    public SelectionScene(double scale, LinkedList<CustomBackground> backgrounds ,LinkedList<CustomCrosshair> crosshairs) {
         pane = new StackPane();
         cross =new StackPane();
+        this.selectionScene=new Scene(pane,scale*300,scale*300);
+        this.backgrounds=backgrounds;
+        this.crosshairs=crosshairs;
 
-        backgrounds=new GameElements(pane,scale);
         IndexBack =0;
         IndexCross= 0;
 
-        pane.setBackground(backgrounds.views.get(0));
-        cross.setBackground(backgrounds.Crossair.get(0));
+        pane.setBackground(backgrounds.get(0).getBackground());
+        cross.setBackground(crosshairs.get(0).getBack());
 
-        this.selectionScene=new Scene(pane,scale*300,scale*300);
+
 
         Message text =new Message(scale,10.0,Pos.CENTER);
         text.addText("");
@@ -36,25 +44,17 @@ public class SelectionScene {
         pane.getChildren().add(text);
 
 
-
-
-
-        //CustomCursor customCursor= new CustomCursor(view);
-        //selectionScene.setOnMouseMoved(event -> customCursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
         pane.getChildren().add(cross);
-        //pane.getChildren().add(customCursor);
-        
-
         cross.setAlignment(Pos.CENTER);
-
-
-
-        //selectionScene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> customCursor.setVisible(false));
-        //selectionScene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> customCursor.setVisible(true));
-
-
-
+        cross.toFront();
         selectionScene.setCursor(Cursor.NONE);
+
+
+        //
+
+
+
+
 
 
 
@@ -71,21 +71,26 @@ public class SelectionScene {
 
     public void rightArrow(){
         IndexBack = (IndexBack>=5) ? 5:IndexBack+1;
-        pane.setBackground(backgrounds.views.get(IndexBack));
+        pane.setBackground(backgrounds.get(IndexBack).getBackground());
     }
     public void leftArrow(){
         IndexBack = (IndexBack >0) ? IndexBack -1:0;
-        pane.setBackground(backgrounds.views.get(IndexBack));
+        pane.setBackground(backgrounds.get(IndexBack).getBackground());
     }
 
     public void upArrow(){
         IndexCross = (IndexCross>=6) ? 6:IndexCross+1;
-        cross.setBackground(backgrounds.Crossair.get(IndexCross));
+        cross.setBackground(crosshairs.get(IndexCross).getBack());
     }
 
     public void downArrow(){
         IndexCross = (IndexCross>0) ? IndexCross-1:0;
-        cross.setBackground(backgrounds.Crossair.get(IndexCross));
+        cross.setBackground(crosshairs.get(IndexCross).getBack());
+    }
+
+
+    public CustomCrosshair getCurrentCross(){
+         return  crosshairs.get(IndexCross);
     }
 
 

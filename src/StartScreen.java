@@ -38,6 +38,7 @@ public class StartScreen  extends Pane {
         view.fitHeightProperty().bind(heightProperty());
 
 
+
         Message message1 =new Message(scale,23.0,Pos.CENTER);
         message1.addText("PRESS ENTER TO START");
         message1.addText("PRESS ESC TO EXIT");
