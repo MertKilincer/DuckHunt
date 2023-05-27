@@ -1,9 +1,4 @@
-import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class StageControl {
 
@@ -63,8 +58,8 @@ public class StageControl {
                 case ENTER:
                     player.pause();
                     CustomCrosshair cursor =selection.getCurrentCross();
-                    Bc aaaaabee = new Bc(scale,cursor);
-                    stage.setScene(aaaaabee.scene1);
+                    GamePane aaaaabee = new GamePane(scale,cursor);
+                    stage.setScene(aaaaabee.scene);
 
                     break;
                 default:

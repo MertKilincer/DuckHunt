@@ -1,6 +1,6 @@
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 
 import javafx.scene.Scene;
 import javafx.scene.image.*;
@@ -10,19 +10,22 @@ import javafx.scene.paint.Color;
 
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
-public class Bc extends Pane {
+public class GamePane extends Pane {
 
-    public Scene scene1;
+    public GameScene scene;
 
     public CustomCrosshair cursor;
 
-    public Duck duck1;
-
     public double scale;
 
-    public Bc(Double scale,CustomCrosshair cursor){
+    public LinkedList<Duck> duckList=new LinkedList<>();
+
+
+
+    public GamePane(Double scale, CustomCrosshair cursor){
 
         Image image = new Image("/assets/background/3.png");
 
@@ -36,17 +39,30 @@ public class Bc extends Pane {
 
 
 
-        this.scene1=new Scene(this,scale*300,scale*300);
+        this.scene =new GameScene(this,scale);
 
-        duck1= new Duck("duck_black",scene1,scale);
-        getChildren().add(duck1.animationView);
-        duck1.animationView.setLayoutX(250);
-        duck1.animationView.setLayoutY(150);
+        Duck duck1= new Duck("duck_black",scene,scale);
+
+        Duck duck2= new Duck("duck_blue",scene,scale);
+        duckList.add(duck1);
+        duckList.add(duck2);
+        scene.updateAmmoCount();
+        scene.updateAmmoCount();
+
+        getChildren().addAll(duck1.animationView,duck2.animationView);
+
+        duck1.animationView.setLayoutX(0);
+        duck1.animationView.setLayoutY(200);
+        duck2.animationView.setLayoutX(150);
+
+        duck2.animationView.setLayoutY(200);
         duck1.animationView.toBack();
-        //duck1.LinearMotionRight('R');
-        duck1.diagonalMotion();
-        scene1.setCursor(Cursor.NONE);
-        events();
+        duck2.animationView.toBack();
+
+        duck1.LinearMotionRight('R');
+        duck2.LinearMotionRight('R');
+
+
 
 
 
@@ -58,27 +74,34 @@ public class Bc extends Pane {
 
     }
 
-    public void events(){
-        scene1.setOnMouseMoved(event -> cursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
-        scene1.addEventHandler(MouseEvent.MOUSE_EXITED, event -> cursor.setVisible(false));
-        scene1.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> cursor.setVisible(true));
+//    public void events(Scene scene){
+//        scene.setOnMouseMoved(event -> cursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
+//        scene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> cursor.setVisible(false));
+//        scene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> cursor.setVisible(true));
+//
+//
+//        scene.setOnMouseClicked(event -> {
+//            Double x = event.getX()-(scale/3*16);
+//            Double y = event.getY()-(scale/3*16);
+//            if (duck1.animationView.getBoundsInParent().contains(x,y)){
+//                System.out.println(duck1.animationView.getBoundsInParent());
+//                duck1.Stop();
+//                duck1.Falling();
+//                duck1.state="A";
+//
+//            }else {
+//
+//            }
+//            if (!duck1.state.equals("Alive")){
+//                System.out.println("İt is shorten");
+//            }
+//        });
+//    }
 
 
-        scene1.setOnMouseClicked(event -> {
-            Double x = event.getX()-(scale/3*16);
-            Double y = event.getY()-(scale/3*16);
-            if (duck1.animationView.getBoundsInParent().contains(x,y)){
-                System.out.println(duck1.animationView.getBoundsInParent());
-                duck1.Stop();
-                duck1.Falling();
-                duck1.state="A";
 
-            }
-            if (!duck1.state.equals("Alive")){
-                System.out.println("İt is shorten");
-            }
-        });
-    }
+
+
 
 
 

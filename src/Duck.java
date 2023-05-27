@@ -46,8 +46,13 @@ public class Duck {
 
     }
 
+    public String getState() {
+        return state;
+    }
 
-
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public void addImages(String colorType, Timeline timeline){
         for (int i=4;i<7;i++){
@@ -106,12 +111,13 @@ public class Duck {
 
 
 
-
     }
 
+    public Boolean inBounds(double x,double y){
 
+        return this.animationView.getBoundsInParent().contains(x,y);
 
-
+    }
 
 
 
