@@ -1,7 +1,17 @@
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.LinkedList;
 
@@ -11,23 +21,50 @@ public class GameScene extends Scene {
 
     public double scale;
 
-    public int ammoCount;
+    public IntegerProperty ammoCount;
+
+    public int roundNum;
+
+    public Boolean gameState=false;
 
 
 
 
-
-    public GameScene(GamePane root,double scale){
+    public GameScene(GamePane root,double scale,int roundNum){
         super(root,300*scale,300*scale);
         this.root=root;
         this.scale=scale;
-
+        this.roundNum=roundNum;
+        this.ammoCount=new SimpleIntegerProperty(root.duckList.size()*3);
         this.setCursor(Cursor.NONE);
+
+
+        Label Round = new Label(String.format("Level " +
+                "%s/6",roundNum));
+        Round.setFont(Font.font("calibri", FontWeight.BOLD,10*scale));
+        Round.setTextFill(Color.ORANGE);
+        root.getChildren().add(Round);
+        root.setAlignment(Round, Pos.TOP_CENTER);
         events();
+
+
+
+
+
+        ammoCount.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                root.ammoCount.setText("Ammo Left: "+ newValue.intValue()+" ");
+            }
+        });
+
+
+
+
+
+
     }
-    public void  updateAmmoCount(){
-        ammoCount+=3;
-    }
+
 
 
 
@@ -37,11 +74,13 @@ public class GameScene extends Scene {
         addEventHandler(MouseEvent.MOUSE_ENTERED, event -> root.cursor.setVisible(true));
 
 
+
+
         setOnMouseClicked(event -> {
             Double x = event.getX()-(scale/3*16);
             Double y = event.getY()-(scale/3*16);
             LinkedList<Duck> removedDucks=new LinkedList<>();
-            ammoCount=ammoCount -1;
+            ammoCount.set(ammoCount.getValue()-1);
             for (Duck i:root.duckList){
 
                if (i.inBounds(x,y)){
@@ -55,24 +94,31 @@ public class GameScene extends Scene {
             }
 
             root.duckList.removeAll(removedDucks);
-            System.out.println(ammoCount);
-            if ((ammoCount >0)) {
+            Message roundResult=new Message(scale,15.0,Pos.CENTER);
+            if ((ammoCount.getValue() >0)) {
                 if (root.duckList.isEmpty()) {
-                    System.out.println("Yes");
+                    setOnMouseClicked(Event::consume);
+                    gameState=true;
+                    roundResult.addText("YOU WIN!");
+
                 }
             }else {
+                gameState=true;
+                setOnMouseClicked(Event::consume);
                 if (root.duckList.isEmpty()) {
-                    System.out.println("Yes");
+                    roundResult.addText("YOU WIN!");
                 } else {
-                    System.out.println("GAMEoVER");
+                    roundResult.addText("GAME OVER!");
 
                 }
             }
+
 
         });
 
 
     }
+
 
 
 

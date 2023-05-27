@@ -40,9 +40,9 @@ public class StartScreen  extends Pane {
 
 
         Message message1 =new Message(scale,23.0,Pos.CENTER);
-        message1.addText("PRESS ENTER TO START");
-        message1.addText("PRESS ESC TO EXIT");
-        fadeText(message1);
+        message1.addFadeText("PRESS ENTER TO START");
+        message1.addFadeText("PRESS ESC TO EXIT");
+
 
 
         message1.setAlignment(Pos.CENTER);
@@ -61,16 +61,7 @@ public class StartScreen  extends Pane {
 
 
 
-    public static void fadeText(Node node) {
-        FadeTransition fade = new FadeTransition();
-        fade.setNode(node);
-        fade.setDuration(Duration.millis(1000));
-        fade.setCycleCount(TranslateTransition.INDEFINITE);
-        fade.setInterpolator(Interpolator.LINEAR);
-        fade.setFromValue(0.1);
-        fade.setToValue(10);
-        fade.play();
-    }
+
 }
 
 

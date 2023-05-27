@@ -1,19 +1,27 @@
 
+import javafx.animation.ParallelTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class GamePane extends Pane {
+public class GamePane extends StackPane {
 
     public GameScene scene;
 
@@ -23,81 +31,62 @@ public class GamePane extends Pane {
 
     public LinkedList<Duck> duckList=new LinkedList<>();
 
+    public Label ammoCount;
+
 
 
     public GamePane(Double scale, CustomCrosshair cursor){
+        this.scale=scale;
+        Pane pane =new Pane();
+        getChildren().add(pane);
 
         Image image = new Image("/assets/background/3.png");
-
         ImageView imageView = new ImageView(clearer(image));;
         imageView.fitWidthProperty().bind(widthProperty());
         imageView.fitHeightProperty().bind(heightProperty());
+        pane.getChildren().add(imageView);
+
         this.cursor = cursor;
-        getChildren().add(imageView);
-        getChildren().add(cursor);
-        this.scale=scale;
+        pane.getChildren().add(cursor);
 
 
 
-        this.scene =new GameScene(this,scale);
 
-        Duck duck1= new Duck("duck_black",scene,scale);
 
-        Duck duck2= new Duck("duck_blue",scene,scale);
+
+        Duck duck1= new Duck("duck_black",scale);
+
+        Duck duck2= new Duck("duck_blue",scale);
         duckList.add(duck1);
         duckList.add(duck2);
-        scene.updateAmmoCount();
-        scene.updateAmmoCount();
 
-        getChildren().addAll(duck1.animationView,duck2.animationView);
+        this.scene =new GameScene(this,scale,1);
+        Group ducks=new Group(duck1.animationView,duck2.animationView);
+        pane.getChildren().add(ducks);
 
         duck1.animationView.setLayoutX(0);
         duck1.animationView.setLayoutY(200);
-        duck2.animationView.setLayoutX(150);
+        duck2.animationView.setLayoutX(0);
 
         duck2.animationView.setLayoutY(200);
-        duck1.animationView.toBack();
-        duck2.animationView.toBack();
-
-        duck1.LinearMotionRight('R');
-        duck2.LinearMotionRight('R');
+        ducks.toBack();
 
 
+        duck1.LinearMotionRight();
+        duck2.LinearMotionRight();
 
 
 
-
-
-
-
+        ammoCount =new Label("Ammo Left: " + scene.ammoCount.getValue()+" ");
+        ammoCount.setFont(Font.font("Calibri", FontWeight.BOLD,10*scale));
+        ammoCount.setTextFill(Color.ORANGE);
+        getChildren().add(ammoCount);
+        setAlignment(ammoCount,Pos.TOP_RIGHT);
 
 
     }
 
-//    public void events(Scene scene){
-//        scene.setOnMouseMoved(event -> cursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
-//        scene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> cursor.setVisible(false));
-//        scene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> cursor.setVisible(true));
 //
-//
-//        scene.setOnMouseClicked(event -> {
-//            Double x = event.getX()-(scale/3*16);
-//            Double y = event.getY()-(scale/3*16);
-//            if (duck1.animationView.getBoundsInParent().contains(x,y)){
-//                System.out.println(duck1.animationView.getBoundsInParent());
-//                duck1.Stop();
-//                duck1.Falling();
-//                duck1.state="A";
-//
-//            }else {
-//
-//            }
-//            if (!duck1.state.equals("Alive")){
-//                System.out.println("İt is shorten");
-//            }
-//        });
-//    }
-
 
 
 
