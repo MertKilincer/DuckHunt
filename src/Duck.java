@@ -1,54 +1,53 @@
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+
 import javafx.util.Duration;
 
-import java.util.concurrent.atomic.AtomicReference;
+
 
 public class Duck {
 
     public ImageView animationView=new ImageView();
 
-    public Scene scene;
 
-    public ParallelTransition right;
+    public ParallelTransition animation;
 
 
-    public char direction;
-    private  final double IMAGE_WIDTH = animationView.getFitWidth();
-    private final double IMAGE_HEIGHT =animationView.getFitHeight();
-    private  final double SCENE_WIDTH;
-    private  final double SCENE_HEIGHT;
-    private static final double VELOCITY_X = 5;
-    private static final double VELOCITY_Y = 5;
+    public Scene  scene;
+    private  final double VELOCITY_X;
+    private  final double VELOCITY_Y;
 
     private double imageX;
     private double imageY;
     private double velocityX;
     private double velocityY;
 
+    public String state="Alive";
+
     public String colorType;
-    public Duck(String colorType, Scene scene, Pane pane){
-        this.scene=scene;
+    public Duck(String colorType, Scene scene,double scale){
+
         this.colorType=colorType;
-        SCENE_WIDTH = scene.getWidth();
-        SCENE_HEIGHT = scene.getHeight();
+        this.scene=scene;
+        Image image=new Image(String.format("/assets/%s/%s.png",colorType, 4));
+        animationView.setImage(image);
+        animationView.setFitWidth(image.getWidth()*2);
+        animationView.setFitHeight(image.getHeight()*2);
+        VELOCITY_X=scale*1;
+        VELOCITY_Y=scale*1;
 
-        imageX = animationView.getFitWidth()/2;
-        imageY = animationView.getFitHeight()/2;
+        imageX = animationView.getLayoutX();
+        imageY = animationView.getLayoutY();
+
+
     }
 
 
 
-
-    public void setDirection(char direction) {
-        this.direction = direction;
-    }
 
     public void addImages(String colorType, Timeline timeline){
         for (int i=4;i<7;i++){
@@ -65,46 +64,25 @@ public class Duck {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
         addImages(colorType,timeline);
-        setDirection('R');
-
-        TranslateTransition transition1 = new TranslateTransition(Duration.seconds(5), animationView);
-        transition1.setByX(scene.getWidth()-animationView.getFitWidth());
-
-        TranslateTransition transition2 = new TranslateTransition(Duration.seconds(5), animationView);
-
-        transition2.setByX(-scene.getWidth()+animationView.getFitWidth());
-        transition1.setOnFinished(event -> {
-            animationView.setScaleX(animationView.getScaleX() * -1);
-
-        });
-
-        transition2.setOnFinished(event -> {
-            animationView.setScaleX(animationView.getScaleX() * -1);
-
-        });
-        SequentialTransition sequentialTransition;
-        if (direction =='R'){
-            sequentialTransition =new SequentialTransition(transition1,transition2);
-        }else {
-            sequentialTransition =new SequentialTransition(transition2,transition1);
-        }
-
-
-        sequentialTransition.setCycleCount(Animation.INDEFINITE);
 
 
 
-       right= new ParallelTransition(timeline,sequentialTransition);
+        velocityX = VELOCITY_X;
+        velocityY =0.0;
+        Timeline animation = new Timeline(
+                new KeyFrame(Duration.millis(50), e -> Move()));
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.play(); // Start animation
 
-       right.setNode(animationView);
+        this.animation = new ParallelTransition(timeline,animation);
+
+        this.animation.play();
 
 
-        // Start the animation
-        right.play();
     }
 
     public void Stop(){
-        right.stop();
+        animation.stop();
     }
 
 
@@ -112,7 +90,6 @@ public class Duck {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
         addImages(colorType,timeline);
-        setDirection('R');
 
 
         velocityX = VELOCITY_X;
@@ -122,9 +99,9 @@ public class Duck {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play(); // Start animation
 
-        ParallelTransition parallelTransition = new ParallelTransition(timeline,animation);
+        this.animation = new ParallelTransition(timeline,animation);
 
-        parallelTransition.play();
+        this.animation.play();
 
 
 
@@ -148,7 +125,9 @@ public class Duck {
 
             Image image1 = new Image(String.format("/assets/%s/%s.png",colorType, 7));
             Image image2 = new Image(String.format("/assets/%s/%s.png",colorType, 8));
-
+            if (animationView.getScaleY()<0){
+                animationView.setScaleY(animationView.getScaleY()*-1);
+            }
 
 
 
@@ -171,7 +150,8 @@ public class Duck {
 
 
         TranslateTransition fall = new TranslateTransition(Duration.seconds(5), animationView);
-        fall.setByY(scene.getHeight());
+        Bounds bounds =scene.getRoot().getLayoutBounds();
+        fall.setByY(bounds.getMaxY());
         SequentialTransition fallAnimation = new SequentialTransition(timeline,fall);
 
         fallAnimation.play();
@@ -183,19 +163,25 @@ public class Duck {
 
         // Check for collision with the scene bounds
         Bounds bounds = scene.getRoot().getLayoutBounds();
+
         Bounds boundsImage = animationView.getBoundsInParent();
 
       if (boundsImage.getMaxX() > bounds.getMaxX()){
             velocityX*=-1;
+            animationView.setScaleX(animationView.getScaleX() * -1);
       }
       if (boundsImage.getMinX()< bounds.getMinX()){
           velocityX*=-1;
+          animationView.setScaleX(animationView.getScaleX() * -1);
       }
         if (boundsImage.getMaxY() >  bounds.getMaxY()) {
             velocityY *= -1; // Reverse the vertical velocity
+            animationView.setScaleY(animationView.getScaleY() * -1);
+
         }
         if (boundsImage.getMinY() < bounds.getMinY()){
             velocityY *= -1;
+            animationView.setScaleY(animationView.getScaleY() * -1);
         }
 
 
