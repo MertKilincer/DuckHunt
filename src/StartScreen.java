@@ -1,35 +1,31 @@
 
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.TranslateTransition;
 
 import javafx.geometry.Pos;
 
 import javafx.scene.Cursor;
-import javafx.scene.Node;
+
 
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 
 import java.io.File;
 
 
 public class StartScreen  extends Pane {
 
-
+    MediaPlayer player;
 
     public Scene titleScene;
 
 
-    public StartScreen(double scale, Stage stage){
+    public StartScreen(double scale,Stage stage){
         setCursor(Cursor.NONE);
 
         Image image =new Image("assets/welcome/1.png");
@@ -39,19 +35,25 @@ public class StartScreen  extends Pane {
 
 
 
-        Message message1 =new Message(scale,23.0,Pos.CENTER);
+        Message message1 =new Message(scale,20.0,Pos.CENTER);
         message1.addFadeText("PRESS ENTER TO START");
         message1.addFadeText("PRESS ESC TO EXIT");
 
 
 
-        message1.setAlignment(Pos.CENTER);
+        Media media=new Media(new File("assets/effects/Title.mp3").toURI().toString());
+        this.player=new MediaPlayer(media);
+        player.setCycleCount(MediaPlayer.INDEFINITE);
+        player.setOnEndOfMedia(() -> player.seek(javafx.util.Duration.ZERO));
+        player.play();
+
+
+
         getChildren().addAll(view,message1);
-        message1.layoutYProperty().bind(heightProperty().divide(1.55));
-        message1.layoutXProperty().bind(widthProperty().divide(7.5));
+        message1.layoutYProperty().bind(heightProperty().divide(1.7));
+        message1.layoutXProperty().bind(widthProperty().divide(8.8));
 
-        titleScene =new Scene(this,scale*300 ,scale*300 );
-
+        titleScene =new Scene(this,scale*image.getWidth() ,scale*image.getHeight() );
 
 
         };

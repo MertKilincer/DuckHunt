@@ -12,8 +12,9 @@ public class DuckHunt extends Application {
     @Override
     public void start(Stage primaryStage){
 
+        StageControl control=new StageControl(primaryStage,scale);
 
-        StageControl control = new StageControl(primaryStage,scale);
+
 
 
 

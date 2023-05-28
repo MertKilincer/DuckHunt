@@ -14,6 +14,7 @@ public class CustomCrosshair extends Pane {
         getChildren().add(cursorImage);
 
 
+
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
 
@@ -31,8 +32,5 @@ public class CustomCrosshair extends Pane {
     }
 
 
-    public ImageView getCursorImage() {
-        return cursorImage;
-    }
 }
 

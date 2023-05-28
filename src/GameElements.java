@@ -12,21 +12,18 @@ public class GameElements {
 
 
     public GameElements(Pane pane, double scale){
-        createBackground(pane);
+        createBackgrounds(pane);
         createCrossair(scale);
 
     }
 
 
-    public void createBackground(Pane pane) {
-        String directoryPath = "assets/background";
-        File directory = new File(directoryPath);
-        File[] files = directory.listFiles();
-        for (File i : files) {
-            views.add(new CustomBackground(i.getPath(),pane));
+    public void createBackgrounds(Pane pane){
+        for (int i=1;i<7;i++){
+            views.add(new CustomBackground(i,pane));
         }
-
     }
+
 
     public void createCrossair(Double scale) {
         String directoryPath = "assets/crosshair";
@@ -39,9 +36,7 @@ public class GameElements {
 
         }
     }
-    public void createMusics(){
-        
-    }
+
 
 
 }

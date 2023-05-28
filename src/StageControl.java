@@ -1,3 +1,6 @@
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 
 public class StageControl {
@@ -8,7 +11,16 @@ public class StageControl {
 
     public GameElements elements;
 
+    public Game game;
+
     public Stage stage;
+
+
+    public Round1 round1;
+
+    public Round2 round2;
+
+
 
 
     public StageControl(Stage stage ,double scale){
@@ -17,11 +29,13 @@ public class StageControl {
         elements=new GameElements(title,scale);
         selection =new SelectionScene(scale,elements.views,elements.Crossair);
 
+
+
+
         stage.setScene(title.titleScene);
 
 
-        Player player = new Player("assets/effects/Title.mp3");
-        player.InfinitePlay();
+
 
         title.titleScene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -34,7 +48,8 @@ public class StageControl {
                 default:
                     break;
             }
-    });
+        });
+
         selection.selectionScene.setOnKeyPressed(event -> {
 
             switch (event.getCode()){
@@ -52,19 +67,30 @@ public class StageControl {
                     selection.downArrow();
                     break;
                 case ESCAPE:
+                    selection.reset();
                     stage.setScene(title.titleScene);
-                    player.InfinitePlay();
+
                     break;
                 case ENTER:
-                    player.pause();
+
                     CustomCrosshair cursor =selection.getCurrentCross();
-                    GamePane aaaaabee = new GamePane(scale,cursor);
-                    stage.setScene(aaaaabee.scene);
+                    Image foreground =selection.backgrounds.get(selection.IndexBack).getForeground();
+                    Background background =selection.backgrounds.get(selection.IndexBack).getBackground();
+                    game=new Game(scale,cursor,foreground,background);
+                    round1=new Round1(1,game,round2,stage);
+                    round2=new Round2(2,game);
+                    stage.setScene(round1.scene);
+
+
 
                     break;
                 default:
                     break;
             }
         });
-}
+
+
+
+
+    }
 }
