@@ -15,6 +15,8 @@ import java.util.LinkedList;
 public class SelectionScene {
     public Scene selectionScene;
 
+    private GameElements elements;
+
     public LinkedList<CustomBackground> backgrounds;
 
     public LinkedList<CustomCrosshair> crosshairs;
@@ -27,19 +29,21 @@ public class SelectionScene {
     public StackPane cross;
 
 
-
+    public MediaPlayer intro;
 
 
     public double scale;
 
 
 
-    public SelectionScene(double scale, LinkedList<CustomBackground> backgrounds, LinkedList<CustomCrosshair> crosshairs) {
+    public SelectionScene(double scale, StartScreen title,Stage stage) {
         pane = new StackPane();
         cross = new StackPane();
         this.selectionScene = new Scene(pane, scale * 256, scale * 240);
-        this.backgrounds = backgrounds;
-        this.crosshairs = crosshairs;
+        this.elements=new GameElements(title,scale);
+        this.backgrounds = elements.views;
+        this.crosshairs = elements.Crossair;
+
 
         this.scale=scale;
         IndexBack = 0;
@@ -63,9 +67,51 @@ public class SelectionScene {
         cross.toFront();
         selectionScene.setCursor(Cursor.NONE);
 
+        Media media =new Media(new File("assets/effects/Intro.mp3").toURI().toString());
+        intro = new MediaPlayer(media);
 
 
 
+        selectionScene.setOnKeyPressed(event -> {
+
+            switch (event.getCode()){
+
+                case RIGHT:
+                    rightArrow();
+                    break;
+                case LEFT:
+                    leftArrow();
+                    break;
+                case UP:
+                    upArrow();
+                    break;
+                case DOWN:
+                    downArrow();
+                    break;
+                case ESCAPE:
+                    StartScreen title2 = new StartScreen(scale,stage);
+                    stage.setScene(title2.titleScene);
+
+                    break;
+                case ENTER:
+                    title.player.stop();
+                    CustomCrosshair cursor =getCurrentCross();
+                    Image foreground =backgrounds.get(IndexBack).getForeground();
+                    Background background =backgrounds.get(IndexBack).getBackground();
+
+                    intro.play();
+                    intro.setOnEndOfMedia(()->{
+                        Round1 round1 =new Round1(cursor,foreground,background,scale,stage);
+                        stage.setScene(round1.scene);
+                    });
+
+
+                    break;
+                default:
+                    break;
+            }
+
+        });
 
 
     }

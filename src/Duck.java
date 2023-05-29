@@ -52,9 +52,9 @@ public abstract class Duck {
         animation.stop();
     }
 
-    public Boolean inBounds(double x,double y){
+    public Boolean inBounds(Bounds bound){
 
-        return this.animationView.getBoundsInParent().contains(x,y);
+        return this.animationView.getBoundsInParent().intersects(bound);
 
     }
 

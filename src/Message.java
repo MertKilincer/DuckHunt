@@ -56,7 +56,7 @@ public class Message extends VBox {
 
     public FadeTransition fade(){
         FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(1000));
+        fade.setDuration(Duration.millis(800));
         fade.setCycleCount(TranslateTransition.INDEFINITE);
         fade.setInterpolator(Interpolator.LINEAR);
         fade.setFromValue(0.1);

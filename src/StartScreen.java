@@ -55,8 +55,24 @@ public class StartScreen  extends Pane {
 
         titleScene =new Scene(this,scale*image.getWidth() ,scale*image.getHeight() );
 
+        titleScene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ENTER:
+                    SelectionScene selection = new SelectionScene(scale,this,stage);
+                    stage.setScene(selection.selectionScene);
+                    break;
+                case ESCAPE:
+                    javafx.application.Platform.exit();
+                    break;
+                default:
+                    break;
+            }
 
-        };
+
+
+
+
+    });
 
 
 
@@ -64,6 +80,7 @@ public class StartScreen  extends Pane {
 
 
 
+}
 }
 
 

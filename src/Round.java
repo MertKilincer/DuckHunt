@@ -4,6 +4,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
 
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -46,13 +49,7 @@ public class Round{
 
     public Scene scene;
 
-    public Label ammoText;
-
-    public Pane pane;
-
-    public StageControl control;
-
-
+    protected Sounds sounds;
 
 
     public enum GameState {
@@ -71,25 +68,25 @@ public class Round{
         this.roundNum=roundNum;
         this.scale=scale;
         this.root=new StackPane();
-        this.control=control;
         this.cursor =cursor;
         this.foreground = new ImageView(foreground);
         this.group=new Group();
+        this.sounds=new Sounds();
         root.setBackground(background);
 
-        pane = new Pane();
+        Pane pane = new Pane();
 
         root.getChildren().add(pane);
 
         pane.getChildren().add(cursor);
-        cursor.toFront();
-        cursor.setVisible(true);
+
+
 
 
 
         this.foreground.fitWidthProperty().bind(root.widthProperty());
         this.foreground.fitHeightProperty().bind(root.heightProperty());
-        root.getChildren().add(this.foreground);
+        pane.getChildren().add(this.foreground);
         pane.getChildren().add(group);
         ammoCount=new SimpleIntegerProperty(0);
 
@@ -101,7 +98,7 @@ public class Round{
         StackPane.setAlignment(Round, Pos.TOP_CENTER);
 
 
-        ammoText =new Label("Ammo Left: " + this.ammoCount.getValue()+" ");
+        Label ammoText =new Label("Ammo Left: " + this.ammoCount.getValue()+" ");
         ammoText.setFont(Font.font("Calibri", FontWeight.BOLD,10*scale));
         ammoText.setTextFill(Color.ORANGE);
         root.getChildren().add(ammoText);
@@ -110,6 +107,8 @@ public class Round{
         this.scene=new Scene(root,256*scale,scale*240);
 
         scene.setCursor(Cursor.NONE);
+        cursor.toFront();
+        group.toBack();
 
 
 
@@ -136,15 +135,23 @@ public class Round{
 
 
         scene.setOnMouseClicked(event -> {
+            sounds.gun();
             Double x = event.getX()+(scale/3*16);
             Double y = event.getY()+(scale/3*16);
+            Point2D point = new Point2D(x,y); // Create a point
+
+            // Create a bound with a width and height of 100
+            BoundingBox bound = new BoundingBox(point.getX(), point.getY(),scale/3*32 , scale/3*32);
             LinkedList<Duck> removedDucks=new LinkedList<>();
             ammoCount.set(ammoCount.getValue()-1);
+
             for (Duck i:duckList){
 
-               if (i.inBounds(x,y)){
+               if (i.inBounds(bound)){
+
                     i.Stop();
                     i.Falling();
+                    sounds.fall();
                     removedDucks.add(i);
                 }
 
@@ -162,6 +169,7 @@ public class Round{
                         roundResult.addText("YOU WIN!");
                         roundResult.addFadeText("Press ENTER to play next level");
                         gameStateProperty.set(GameState.NEXT_LEVEL);
+
                     }else{
                         roundResult.addText("You have completed the game!");
                         roundResult.addFadeText("Press ENTER to play again");
@@ -202,6 +210,7 @@ public class Round{
 
 
         });
+
 
 
 

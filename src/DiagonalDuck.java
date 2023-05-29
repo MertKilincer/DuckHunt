@@ -28,7 +28,7 @@ public class DiagonalDuck extends Duck{
             initialVelocityY=scale*-1;
         }else {
             initialVelocityY=scale*1;
-            animationView.setScaleX(animationView.getScaleY()*-1);
+            animationView.setScaleY(animationView.getScaleY()*-1);
         }
         Motion();
 
