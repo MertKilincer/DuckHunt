@@ -7,20 +7,21 @@ import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
+
 
 import java.util.*;
-
-import static javax.swing.text.StyleConstants.setBackground;
 
 public class Round{
 
@@ -47,6 +48,12 @@ public class Round{
 
     public Label ammoText;
 
+    public Pane pane;
+
+    public StageControl control;
+
+
+
 
     public enum GameState {
 
@@ -60,32 +67,34 @@ public class Round{
 
 
 
-    public Round(int roundNum,Game game){
+    public Round(int roundNum, CustomCrosshair cursor, Image foreground ,Background background,double scale){
         this.roundNum=roundNum;
-        this.scale=game.scale;
+        this.scale=scale;
         this.root=new StackPane();
-
-        this.cursor =game.cursor;
-        this.foreground = new ImageView(game.foreground);
+        this.control=control;
+        this.cursor =cursor;
+        this.foreground = new ImageView(foreground);
         this.group=new Group();
-        root.setBackground(game.background);
+        root.setBackground(background);
 
-        Pane pane = new Pane();
+        pane = new Pane();
 
         root.getChildren().add(pane);
+
         pane.getChildren().add(cursor);
         cursor.toFront();
+        cursor.setVisible(true);
 
 
 
-        foreground.fitWidthProperty().bind(root.widthProperty());
-        foreground.fitHeightProperty().bind(root.heightProperty());
-        root.getChildren().add(foreground);
+        this.foreground.fitWidthProperty().bind(root.widthProperty());
+        this.foreground.fitHeightProperty().bind(root.heightProperty());
+        root.getChildren().add(this.foreground);
         pane.getChildren().add(group);
         ammoCount=new SimpleIntegerProperty(0);
 
 
-        Label Round = new Label(String.format("Level " + "%s/6",roundNum));
+        Label Round = new Label(String.format("Level " + "%s/6",this.roundNum));
         Round.setFont(Font.font("calibri", FontWeight.BOLD,10*scale));
         Round.setTextFill(Color.ORANGE);
         root.getChildren().add(Round);
@@ -99,10 +108,13 @@ public class Round{
         StackPane.setAlignment(ammoText,Pos.TOP_RIGHT);
 
         this.scene=new Scene(root,256*scale,scale*240);
+
         scene.setCursor(Cursor.NONE);
 
 
+
         this.ammoCount.addListener((observable, oldValue, newValue) -> ammoText.setText("Ammo Left: "+ newValue.intValue()+" "));
+
 
         events();
 
@@ -146,7 +158,7 @@ public class Round{
                     scene.setOnMouseClicked(Event::consume);
 
 
-                    if (roundNum<5){
+                    if (roundNum<6){
                         roundResult.addText("YOU WIN!");
                         roundResult.addFadeText("Press ENTER to play next level");
                         gameStateProperty.set(GameState.NEXT_LEVEL);
@@ -163,7 +175,7 @@ public class Round{
 
                 scene.setOnMouseClicked(Event::consume);
                 if (duckList.isEmpty()) {
-                    if (roundNum<5){
+                    if (roundNum<6){
                         roundResult.addText("YOU WIN!");
                         roundResult.addFadeText("Press ENTER to play next level");
                         gameStateProperty.set(GameState.NEXT_LEVEL);

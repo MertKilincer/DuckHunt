@@ -4,14 +4,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 public class CustomCrosshair extends Pane {
-    private ImageView cursorImage;
+    public  ImageView cursorImageView;
+
+    public Image cursorImage;
 
     public Background background;
 
+    public String filepath;
+
+    public double scale;
+
     public CustomCrosshair(String filepath,Double scale) {
+        this.filepath=filepath;
+        this.scale=scale;
         Image image = new Image(filepath, 32 * (scale / 3), 32 * (scale / 3), true, true);
-        cursorImage = new ImageView(image);
-        getChildren().add(cursorImage);
+        cursorImageView = new ImageView(image);
+        getChildren().add(cursorImageView);
 
 
 
@@ -22,6 +30,7 @@ public class CustomCrosshair extends Pane {
 
     }
 
+
     public void updatePosition(double x, double y) {
         setTranslateX(x);
         setTranslateY(y);
@@ -31,6 +40,10 @@ public class CustomCrosshair extends Pane {
         return background;
     }
 
+    public Image getCursorImage() {
+        return cursorImage;
+    }
 
-}
+    }
+
 

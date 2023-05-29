@@ -24,9 +24,11 @@ public class DiagonalDuck extends Duck{
             initialVelocityX=scale*-1;
         }
         if (verticalDirection=='U'){
+
             initialVelocityY=scale*-1;
         }else {
             initialVelocityY=scale*1;
+            animationView.setScaleX(animationView.getScaleY()*-1);
         }
         Motion();
 
@@ -78,7 +80,7 @@ public class DiagonalDuck extends Duck{
         }
         if (boundsImage.getMinX()< 0){
             velocityX*=-1;
-            animationView.setScaleX(animationView.getScaleX() * -1);
+           animationView.setScaleX(animationView.getScaleX() * -1);
         }
         if (boundsImage.getMaxY() >  240*scale) {
             velocityY *= -1; // Reverse the vertical velocity
