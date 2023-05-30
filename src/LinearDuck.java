@@ -87,7 +87,7 @@ public class LinearDuck extends Duck{
             Image image = new Image(String.format("/assets/%s/%s.png",colorType, i));
 
 
-            KeyFrame keyFrame = new KeyFrame(Duration.millis( 150*i), e -> imageSetter(image));
+            KeyFrame keyFrame = new KeyFrame(Duration.millis( 150*i), e -> animationView.setImage(image));
 
             timeline.getKeyFrames().add(keyFrame);
         }

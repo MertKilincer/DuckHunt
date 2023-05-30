@@ -1,7 +1,4 @@
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -12,42 +9,32 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.LinkedList;
 
-public class SelectionScene {
-    public Scene selectionScene;
+public class SelectionScreen {
+    private Scene selectionScene;
 
-    private GameElements elements;
+    private final LinkedList<CustomBackground> backgrounds;
 
-    public LinkedList<CustomBackground> backgrounds;
+    private final LinkedList<CustomCrosshair> crosshairs;
+    private int backgroundIndex;
 
-    public LinkedList<CustomCrosshair> crosshairs;
-    public int IndexBack;
+    private int chrosshairIndex;
 
-    public int IndexCross;
+    private final StackPane pane;
 
-    public StackPane pane;
-
-    public StackPane cross;
+    private final StackPane cross;
 
 
-    public MediaPlayer intro;
-
-
-    public double scale;
-
-
-
-    public SelectionScene(double scale, StartScreen title,Stage stage) {
+    public SelectionScreen(double scale, TitleScreen title, Stage stage,double volume) {
         pane = new StackPane();
         cross = new StackPane();
         this.selectionScene = new Scene(pane, scale * 256, scale * 240);
-        this.elements=new GameElements(title,scale);
-        this.backgrounds = elements.views;
-        this.crosshairs = elements.Crossair;
+        VisualConstants visuals = new VisualConstants(title, scale);
+        this.backgrounds = visuals.getBackgrounds();
+        this.crosshairs = visuals.getCrossair();
 
 
-        this.scale=scale;
-        IndexBack = 0;
-        IndexCross = 0;
+        backgroundIndex = 0;
+        chrosshairIndex = 0;
 
         pane.setBackground(backgrounds.get(0).getBackground());
         cross.setBackground(crosshairs.get(0).getBack());
@@ -65,10 +52,11 @@ public class SelectionScene {
         pane.getChildren().add(cross);
         cross.setAlignment(Pos.CENTER);
         cross.toFront();
-        selectionScene.setCursor(Cursor.NONE);
+
 
         Media media =new Media(new File("assets/effects/Intro.mp3").toURI().toString());
-        intro = new MediaPlayer(media);
+        MediaPlayer intro = new MediaPlayer(media);
+        intro.setVolume(volume);
 
 
 
@@ -89,19 +77,19 @@ public class SelectionScene {
                     downArrow();
                     break;
                 case ESCAPE:
-                    StartScreen title2 = new StartScreen(scale,stage);
-                    stage.setScene(title2.titleScene);
+                    TitleScreen newTitle = new TitleScreen(scale,stage,volume);
+                    stage.setScene(newTitle.getTitleScene());
 
                     break;
                 case ENTER:
-                    title.player.stop();
+                    title.getTitleMusic().stop();
                     CustomCrosshair cursor =getCurrentCross();
-                    Image foreground =backgrounds.get(IndexBack).getForeground();
-                    Background background =backgrounds.get(IndexBack).getBackground();
-
+                    Image foreground =getCurrentBackground().getForeground();
+                    Background background =getCurrentBackground().getBackground();
+                    GameElements elements =new GameElements(scale,volume,cursor,background,foreground,stage);
                     intro.play();
                     intro.setOnEndOfMedia(()->{
-                        Round1 round1 =new Round1(cursor,foreground,background,scale,stage);
+                        Round1 round1 =new Round1(elements);
                         stage.setScene(round1.scene);
                     });
 
@@ -118,35 +106,35 @@ public class SelectionScene {
 
 
     public void rightArrow() {
-        IndexBack = (IndexBack >= 5) ? 5 : IndexBack + 1;
-        pane.setBackground(backgrounds.get(IndexBack).getBackground());
+        backgroundIndex = (backgroundIndex >= 5) ? 5 : backgroundIndex + 1;
+        pane.setBackground(backgrounds.get(backgroundIndex).getBackground());
 
     }
 
     public void leftArrow() {
-        IndexBack = (IndexBack > 0) ? IndexBack - 1 : 0;
-        pane.setBackground(backgrounds.get(IndexBack).getBackground());
+        backgroundIndex = (backgroundIndex > 0) ? backgroundIndex - 1 : 0;
+        pane.setBackground(backgrounds.get(backgroundIndex).getBackground());
     }
 
     public void upArrow() {
-        IndexCross = (IndexCross >= 6) ? 6 : IndexCross + 1;
-        cross.setBackground(crosshairs.get(IndexCross).getBack());
+        chrosshairIndex = (chrosshairIndex >= 6) ? 6 : chrosshairIndex + 1;
+        cross.setBackground(crosshairs.get(chrosshairIndex).getBack());
     }
 
     public void downArrow() {
-        IndexCross = (IndexCross > 0) ? IndexCross - 1 : 0;
-        cross.setBackground(crosshairs.get(IndexCross).getBack());
+        chrosshairIndex = (chrosshairIndex > 0) ? chrosshairIndex - 1 : 0;
+        cross.setBackground(crosshairs.get(chrosshairIndex).getBack());
     }
-    public void reset(){
-        IndexCross=0;
-        IndexBack=0;
-        pane.setBackground(backgrounds.get(0).getBackground());
-        cross.setBackground(crosshairs.get(0).getBack());
-    }
+
 
     public CustomCrosshair getCurrentCross() {
-        return crosshairs.get(IndexCross);
+        return crosshairs.get(chrosshairIndex);
     }
 
+    public CustomBackground getCurrentBackground(){ return  backgrounds.get(backgroundIndex);}
 
+
+    public Scene getSelectionScene() {
+        return selectionScene;
+    }
 }

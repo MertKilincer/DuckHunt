@@ -5,16 +5,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
 
 import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -22,35 +20,26 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 
 import java.util.*;
 
 public class Round{
 
-
-    public double scale;
-
-    public StackPane root;
-
-    public LinkedList<Duck> duckList= new LinkedList<>();
-
-    public IntegerProperty ammoCount;
-
-    public int roundNum;
-
-    public ObjectProperty<GameState> gameStateProperty = new SimpleObjectProperty<>(GameState.ON_HOLD);
-
-    public CustomCrosshair cursor;
-
-    public ImageView foreground;
+    protected double scale;
 
     public Group group;
 
     public Scene scene;
 
     protected Sounds sounds;
+    public LinkedList<Duck> duckList= new LinkedList<>();
+    protected IntegerProperty ammoCount;
+    protected ObjectProperty<GameState> gameStateProperty = new SimpleObjectProperty<>(GameState.ON_HOLD);
 
+
+    private GameElements elements;
 
     public enum GameState {
 
@@ -64,15 +53,15 @@ public class Round{
 
 
 
-    public Round(int roundNum, CustomCrosshair cursor, Image foreground ,Background background,double scale){
-        this.roundNum=roundNum;
-        this.scale=scale;
-        this.root=new StackPane();
-        this.cursor =cursor;
-        this.foreground = new ImageView(foreground);
+    public Round(int roundNum, GameElements elements){
+        this.elements=elements;
+        this.scale=elements.getScale();
+        StackPane root=new StackPane();
+        CustomCrosshair cursor =new CustomCrosshair(elements.getCrosshair().filepath,elements.getScale());
         this.group=new Group();
-        this.sounds=new Sounds();
-        root.setBackground(background);
+        this.sounds=new Sounds(elements.getVolume());
+
+        root.setBackground(elements.getBackground());
 
         Pane pane = new Pane();
 
@@ -81,18 +70,18 @@ public class Round{
         pane.getChildren().add(cursor);
 
 
+        ImageView foreground =new ImageView(elements.getForeground());
 
 
-
-        this.foreground.fitWidthProperty().bind(root.widthProperty());
-        this.foreground.fitHeightProperty().bind(root.heightProperty());
-        pane.getChildren().add(this.foreground);
+        foreground.fitWidthProperty().bind(root.widthProperty());
+        foreground.fitHeightProperty().bind(root.heightProperty());
+        pane.getChildren().add(foreground);
         pane.getChildren().add(group);
         ammoCount=new SimpleIntegerProperty(0);
 
 
-        Label Round = new Label(String.format("Level " + "%s/6",this.roundNum));
-        Round.setFont(Font.font("calibri", FontWeight.BOLD,10*scale));
+        Label Round = new Label(String.format("Level " + "%s/6",roundNum));
+        Round.setFont(Font.font("Calibri", FontWeight.BOLD,10*scale));
         Round.setTextFill(Color.ORANGE);
         root.getChildren().add(Round);
         StackPane.setAlignment(Round, Pos.TOP_CENTER);
@@ -114,19 +103,6 @@ public class Round{
 
         this.ammoCount.addListener((observable, oldValue, newValue) -> ammoText.setText("Ammo Left: "+ newValue.intValue()+" "));
 
-
-        events();
-
-
-
-
-
-    }
-
-
-
-
-    public void events(){
         scene.setOnMouseMoved(event -> cursor.updatePosition(event.getX()-(scale/3*16), event.getY()-(scale/3*16)));
         scene.addEventHandler(MouseEvent.MOUSE_EXITED, event -> cursor.setVisible(false));
         scene.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> cursor.setVisible(true));
@@ -147,7 +123,7 @@ public class Round{
 
             for (Duck i:duckList){
 
-               if (i.inBounds(bound)){
+                if (i.inBounds(bound)){
 
                     i.Stop();
                     i.Falling();
@@ -214,7 +190,78 @@ public class Round{
 
 
 
+
+
     }
+
+
+    protected void gameOver(Stage stage){
+        sounds.getGameOver().play();
+        scene.setOnKeyPressed(event5 -> {
+            if (event5.getCode().equals(KeyCode.ENTER)){
+                sounds.getGameOver().stop();
+                Round1 round1 =new Round1(elements);
+                stage.setScene(round1.scene);
+            } else if (event5.getCode().equals(KeyCode.ESCAPE)) {
+                sounds.getGameOver().stop();
+                TitleScreen title =new TitleScreen(scale,stage,elements.getVolume());
+                stage.setScene(title.getTitleScene());
+
+            }
+        });
+    }
+
+    protected void gameNextLevel(int levelNum){
+        sounds.getLevelCompleted().play();
+        scene.setOnKeyPressed(event3 -> {
+            if (event3.getCode().equals(KeyCode.ENTER)){
+                sounds.getLevelCompleted().stop();
+                Round round =nextRound(levelNum,elements);
+                elements.getStage().setScene(round.scene);
+            }
+        });
+    }
+
+
+
+    private Round nextRound(int levelNum,GameElements elements){
+        Round round = null;
+        switch (levelNum){
+
+            case 2:
+                round = new Round2(elements);
+                break;
+
+            case 3:
+                round = new Round3(elements);
+                break;
+
+            case 4:
+                round = new Round4(elements);
+                break;
+
+            case 5:
+                round = new Round5(elements);
+                break;
+
+            case 6:
+                round = new Round6(elements);
+                break;
+
+        }
+
+    return round;
+    }
+
+
+
+    protected void duckAdder(Duck duck){
+        group.getChildren().add(duck.animationView);
+        duckList.add(duck);
+        ammoCount.set(duckList.size()*3);
+    }
+
+
 }
 
 

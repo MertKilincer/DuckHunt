@@ -30,7 +30,10 @@ public abstract class Duck {
         this.scale=scale;
         Image image=new Image(String.format("/assets/%s/%s.png",colorType, 4));
         animationView.setPreserveRatio(true);
-        imageSetter(image);
+        animationView.setSmooth(true);
+        animationView.setFitHeight(33*scale);
+        animationView.setFitWidth(33*scale);
+        animationView.setImage(image);
 
         imageX = animationView.getLayoutX();
         imageY = animationView.getLayoutY();
@@ -71,11 +74,11 @@ public abstract class Duck {
 
 
             KeyFrame keyFrame = new KeyFrame(Duration.millis( 70), e -> {
-                imageSetter(image1);
+                animationView.setImage(image1);
 
             });
             KeyFrame keyFrame1 = new KeyFrame(Duration.millis(300),event -> {
-                imageSetter(image2);
+                animationView.setImage(image2);
             });
 
 
@@ -93,11 +96,10 @@ public abstract class Duck {
         fallAnimation.play();
     }
 
-    public void imageSetter(Image image){
-        animationView.setImage(image);
-        animationView.setFitHeight(image.getHeight()*scale);
-        animationView.setFitWidth(image.getWidth()*scale);
 
+    public void setLayouts(double x,double y){
+        this.animationView.setLayoutX(x);
+        this.animationView.setLayoutY(y);
     }
 
 

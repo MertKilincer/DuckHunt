@@ -2,6 +2,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
@@ -27,7 +28,8 @@ public class DiagonalDuck extends Duck{
 
             initialVelocityY=scale*-1;
         }else {
-            initialVelocityY=scale*1;
+            initialVelocityY=scale*1
+            ;
             animationView.setScaleY(animationView.getScaleY()*-1);
         }
         Motion();
@@ -73,26 +75,27 @@ public class DiagonalDuck extends Duck{
 
 
         Bounds boundsImage = animationView.getBoundsInParent();
+        BoundingBox gameBorders =new BoundingBox(0,0,256*scale,240*scale);
 
-        if (boundsImage.getMaxX() > 256*scale){
-            velocityX*=-1;
+        if (boundsImage.getMaxX() > gameBorders.getMaxX()){
             animationView.setScaleX(animationView.getScaleX() * -1);
-        }
-        if (boundsImage.getMinX()< 0){
             velocityX*=-1;
-           animationView.setScaleX(animationView.getScaleX() * -1);
+
         }
-        if (boundsImage.getMaxY() >  240*scale) {
+        if (boundsImage.getMinX()< gameBorders.getMinX()){
+            animationView.setScaleX(animationView.getScaleX() * -1);
+            velocityX*=-1;
+
+        }
+        if (boundsImage.getMaxY() >  gameBorders.getMaxY()) {
             velocityY *= -1; // Reverse the vertical velocity
             animationView.setScaleY(animationView.getScaleY() * -1);
 
         }
-        if (boundsImage.getMinY() < 0){
+        if (boundsImage.getMinY() < gameBorders.getMinY()){
             velocityY *= -1;
             animationView.setScaleY(animationView.getScaleY() * -1);
         }
-
-
 
         super.imageX += velocityX;
         super.imageY += velocityY;

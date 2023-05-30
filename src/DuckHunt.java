@@ -7,14 +7,15 @@ import javafx.stage.Stage;
 
 public class DuckHunt extends Application {
 
-    public Double scale= 3.0;
+    public double SCALE= 3.0;
+
+    public double VOLUME =0.5;
 
     @Override
     public void start(Stage primaryStage){
 
-        StageControl control=new StageControl(primaryStage,scale);
-
-
+       TitleScreen title = new TitleScreen(SCALE,primaryStage,VOLUME);
+       primaryStage.setScene(title.getTitleScene());
 
 
 

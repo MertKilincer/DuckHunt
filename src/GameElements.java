@@ -1,43 +1,55 @@
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-
-import java.io.File;
-import java.util.LinkedList;
+import javafx.scene.layout.Background;
+import javafx.stage.Stage;
 
 public class GameElements {
 
-    public LinkedList<CustomBackground> views = new LinkedList<>();
+    private Image foreground;
 
-    public LinkedList<CustomCrosshair> Crossair = new LinkedList<>();
+    private Background background;
+
+    private CustomCrosshair crosshair;
+
+    private double scale;
+
+    private double volume;
+
+    private Stage stage;
 
 
-    public GameElements(Pane pane, double scale){
-        createBackgrounds(pane);
-        createCrossair(scale);
+
+    public GameElements(double scale,double volume,CustomCrosshair crosshair,Background background,Image foreground,Stage stage){
+        this.scale=scale;
+        this.volume=volume;
+        this.crosshair=crosshair;
+        this.background=background;
+        this.foreground=foreground;
+        this.stage=stage;
 
     }
 
 
-    public void createBackgrounds(Pane pane){
-        for (int i=1;i<7;i++){
-            views.add(new CustomBackground(i,pane));
-        }
+    public Image getForeground() {
+        return foreground;
     }
 
-
-    public void createCrossair(Double scale) {
-        String directoryPath = "assets/crosshair";
-        File directory = new File(directoryPath);
-        File[] files = directory.listFiles();
-
-        for (File i : files) {
-            Crossair.add(new CustomCrosshair(i.getPath(),scale));
-
-
-        }
+    public Background getBackground() {
+        return background;
     }
 
+    public CustomCrosshair getCrosshair() {
+        return crosshair;
+    }
 
+    public double getVolume() {
+        return volume;
+    }
 
+    public double getScale() {
+        return scale;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
 }
-

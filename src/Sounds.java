@@ -17,10 +17,11 @@ public class Sounds{
 
     private MediaPlayer levelCompleted;
 
-    public static double balance=15.0;
+    private double volume;
 
 
-    public Sounds(){
+    public Sounds(double volume){
+        this.volume=volume;
         duckFalls=createPlayer("assets/effects/DuckFalls.mp3");
         gun=createPlayer("assets/effects/Gunshot.mp3");
         gameCompleted=createPlayer("assets/effects/GameCompleted.mp3");
@@ -34,8 +35,7 @@ public class Sounds{
     private MediaPlayer createPlayer(String filepath) {
         Media media=new Media(new File(filepath).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setBalance(balance);
-
+        mediaPlayer.setVolume(volume);
         return mediaPlayer;
     }
 
