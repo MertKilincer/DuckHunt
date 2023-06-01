@@ -26,7 +26,6 @@ public class VisualConstants {
     public VisualConstants(Pane pane, double scale){
         createBackgrounds(pane);
         createCrossairs(scale);
-
     }
 
     /**
@@ -50,8 +49,6 @@ public class VisualConstants {
 
         for (File i : files) {
             Crossair.add(new CustomCrosshair(i.getPath(),scale));
-
-
         }
     }
 

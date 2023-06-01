@@ -8,39 +8,39 @@ import javafx.scene.input.KeyCode;
  */
 public class Round6 extends Round{
     public Round6(GameElements elements) {
+        /**
+        Duck adding to the round
+         */
         super(6, elements);
         Duck duck1=new DiagonalDuck("duck_blue",scale,'D','R');
         Duck duck2=new DiagonalDuck("duck_black",scale,'U','L');
         Duck duck3=new DiagonalDuck("duck_red",scale,'D','L');
-        duck2.animationView.setLayoutX(scene.getWidth()-duck2.animationView.getFitWidth());
-        duck1.animationView.setLayoutX(0);
-        duck3.animationView.setLayoutX(scene.getWidth()-duck2.animationView.getFitWidth());
-        duck1.animationView.setLayoutY(scene.getHeight()/2);
-        duck2.animationView.setLayoutY(scene.getHeight()/3);
-        duck3.animationView.setLayoutY(scene.getHeight()/4);
-        super.group.getChildren().add(duck1.animationView);
-        super.group.getChildren().add(duck2.animationView);
-        super.group.getChildren().add(duck3.animationView);
-        super.duckList.add(duck1);
-        super.duckList.add(duck2);
-        super.duckList.add(duck3);
-
-        ammoCount.set(super.duckList.size()*3);
+        duck1.setLayouts(0,getScene().getHeight()/2);
+        duck2.setLayouts(getScene().getWidth()-duck2.getDuckWidth(),getScene().getHeight()/3);
+        duck3.setLayouts(getScene().getWidth()-duck2.getDuckWidth(),getScene().getHeight()/4);
+        duckAdder(duck1);
+        duckAdder(duck2);
+        duckAdder(duck3);
 
 
-
+        /**
+         * Round Listener that handle the level ending.
+         */
         gameStateProperty.addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
                 case GAME_OVER:
-                    gameOver(elements.getStage());
+                    gameOver(elements.getStage());//gameOver key event call.
                     break;
                 case COMPLETED:
+                    /**
+                    Game completed event handlers.
+                     */
                     sounds.getGameCompleted().play();
-                    scene.setOnKeyPressed(event5 -> {
+                    getScene().setOnKeyPressed(event5 -> {
                         if (event5.getCode().equals(KeyCode.ENTER)){
                             sounds.getGameCompleted().stop();
                             Round1 round1 =new Round1(elements);
-                            elements.getStage().setScene(round1.scene);
+                            elements.getStage().setScene(round1.getScene());
                         }else if (event5.getCode().equals(KeyCode.ESCAPE)){
                             sounds.getGameCompleted().stop();
                             TitleScreen title = new TitleScreen(scale,elements.getStage(),elements.getVolume());

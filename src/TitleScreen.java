@@ -41,7 +41,6 @@ public class TitleScreen extends Pane {
         view.fitWidthProperty().bind(widthProperty());
         view.fitHeightProperty().bind(heightProperty());
 
-
         /*
             message1 objects holds a flashing text in it
          */
@@ -52,7 +51,6 @@ public class TitleScreen extends Pane {
         message1.layoutYProperty().bind(heightProperty().divide(1.7));
         message1.layoutXProperty().bind(widthProperty().divide(8.8));
 
-
         /*
             These lines create the player for playing the title music.
          */
@@ -62,9 +60,6 @@ public class TitleScreen extends Pane {
         player.setVolume(volume);
         player.setOnEndOfMedia(() -> player.seek(javafx.util.Duration.ZERO));
         player.play();
-
-
-
 
         /*
             These lines create the title scene and add the key pressed events for continuity of the app.
@@ -86,10 +81,6 @@ public class TitleScreen extends Pane {
                 default:
                     break;
             }
-
-
-
-
 
     });
 
