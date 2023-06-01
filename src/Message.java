@@ -1,25 +1,40 @@
+/**
+ * Necessary java fx imports.
+ */
+
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 
+/**
+ * Message class to give multiple lines of message as a one object in app.
+ */
 public class Message extends VBox {
 
+    /**
+     * Message is a vbox and its components is scaled by the scale.
+     */
+    private Double scale;
 
-    public Double scale;
+    /**
+     * size of the text in the boxes.
+     */
+    private Double size;
 
-
-    public Double size;
-
+    /**
+     * Message class constructor that takes params of the field.
+     * @param scale scale of the components.
+     * @param textSize text-size of the pane.
+     * @param position position of the box in the pane.
+     */
     public Message(Double scale,Double textSize,Pos position){
         super();
         setAlignment(position);
@@ -28,6 +43,11 @@ public class Message extends VBox {
         setSpacing(scale*(-textSize/3));
 
     }
+
+    /**
+     * Add normal text as a line to message.
+     * @param line line as a string parameter to add to the box.
+     */
     public void addText(String line) {
 
         Label text = new Label(line);
@@ -37,11 +57,11 @@ public class Message extends VBox {
         getChildren().add(text);
 
     }
-    public void fadeAll(){
-        FadeTransition fade=fade();
-        fade.setNode(this);
-        fade.play();
-    }
+
+    /**
+     * addFadeText method adds strings to the message as a flashing text line.
+     * @param line string that the wanted to displayed at the scene.
+     */
     public void addFadeText(String line){
         FadeTransition fade=fade();
         Label text = new Label(line);
@@ -53,7 +73,11 @@ public class Message extends VBox {
         fade.play();
     }
 
-
+    /**
+     * fade method is created for flashing texts.
+     * @return FadeTransition for flashing texts
+     * @see FadeTransition
+     */
     public FadeTransition fade(){
         FadeTransition fade = new FadeTransition();
         fade.setDuration(Duration.millis(800));
