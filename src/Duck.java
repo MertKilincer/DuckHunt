@@ -4,7 +4,6 @@
 
 import javafx.animation.*;
 import javafx.geometry.Bounds;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -151,7 +150,7 @@ public abstract class Duck {
     }
 
     /**
-     * This methods change the starting positions of ducks in the game.
+     * This method change the starting positions of ducks in the game.
      * @param x starting x position.
      * @param y starting y position.
      */
