@@ -9,7 +9,7 @@ import javafx.scene.input.KeyCode;
 public class Round6 extends Round{
     public Round6(GameElements elements) {
         /**
-        Duck adding to the round
+        Ducks adding to the round
          */
         super(6, elements);
         Duck duck1=new DiagonalDuck("duck_blue",scale,'D','R');
