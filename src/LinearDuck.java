@@ -69,7 +69,7 @@ public class LinearDuck extends Duck{
 
 
     /**
-     *  This function moves the duck postion and reflect the animation if necessary
+     *  This function moves the duck position and reflect the animation if necessary
      */
     public void Move() {
 
